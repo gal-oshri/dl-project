@@ -1,8 +1,8 @@
-# Compressed Context Memory for Dialogue Summarization
+# Dialogue Summarization with Compressed Context
 
-Implementation of [Compressed Context Memory for Online Language Model Interaction](https://arxiv.org/abs/2312.03414) (ICLR 2024) applied to dialogue summarization.
+A dialogue summarization system that compresses an entire conversation into a single special token's KV cache, then generates a summary from that compressed representation alone — without access to the original dialogue at generation time.
 
-The system compresses dialogue context into a single `<SUM>` token's KV cache using **Conditional LoRA**, enabling memory-efficient summarization.
+The model learns to distill dialogue information into a `<SUM>` token using **Conditional LoRA** (low-rank adapters that activate only at the `<SUM>` position), while the base LLM weights remain frozen.
 
 ## Architecture
 
@@ -23,7 +23,7 @@ Dialogue + <SUM> ──► Base LLM (frozen) + Conditional LoRA ──► KV Cac
 | Component | Description |
 |-----------|-------------|
 | **SeparatedEmbedding** | Trainable embedding for `<SUM>` while base vocab is frozen |
-| **ConditionalLoRA** | LoRA weights activate *only* at `<SUM>` token positions (Eq. 4 in paper) |
+| **ConditionalLoRA** | LoRA weights activate *only* at `<SUM>` token positions |
 | **KV Extraction** | After encoding, only `<SUM>`'s KV cache is kept; dialogue KV is discarded |
 
 ## Project Structure
@@ -99,7 +99,7 @@ python -m dl_project infer --weights_path ./compressed_context_model
 
 ## How It Works
 
-### Training (CCM Paper Algorithm 1)
+### Training
 
 1. **Encode**: Pass `dialogue + <SUM>` through the model with Conditional LoRA active only at `<SUM>` positions
 2. **Extract**: Take only the `<SUM>` token's KV cache from the full cache
@@ -111,20 +111,11 @@ python -m dl_project infer --weights_path ./compressed_context_model
 1. **Compress**: Forward pass on `dialogue + <SUM>` → extract `<SUM>`'s KV (dialogue KV discarded)
 2. **Generate**: Autoregressive generation using only the compressed KV cache
 
-This achieves compression of the full dialogue into a single KV vector per layer (compression factor ≈ context_length / 1).
+This achieves compression of the full dialogue into a single KV vector per layer.
 
-## Configuration
+## Based On
 
-All defaults match the CCM paper (Tables 13-14):
-
-| Parameter | Default | Paper Reference |
-|-----------|---------|-----------------|
-| LoRA rank | 8 | Table 14 |
-| LoRA alpha | 16 | Table 14 |
-| LoRA dropout | 0.05 | Table 14 |
-| Target modules | q,k,v,o_proj | Table 14 |
-| Learning rate | 3e-4 | Table 13 |
-| Batch size | 4 | — |
+This project is based on the Compressed Context Memory (CCM) paper, with modifications and changes suited for our use case. While the original CCM system uses compression tokens to compress accumulated context across multiple interaction turns (e.g., dialogue history, user profiles, task demonstrations), our adaptation repurposes the mechanism as a **summarization token** — compressing an entire dialogue into a single `<SUM>` token's KV cache to generate a standalone summary, rather than compressing context for downstream turn-by-turn prediction.
 
 ## References
 
