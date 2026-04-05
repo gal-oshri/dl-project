@@ -1,0 +1,32 @@
+{
+  "train_losses": [
+    1.349460663640722,
+    1.1392203987747334,
+    0.9913653366259503
+  ],
+  "best_loss": 0.9913653366259503,
+  "config": {
+    "model_name": "meta-llama/Llama-2-7b-chat-hf",
+    "dataset_name": "knkarthick/dialogsum",
+    "compression_token": "<SUM>",
+    "lora_r": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "lora_target_modules": [
+      "k_proj",
+      "o_proj",
+      "q_proj",
+      "v_proj",
+      "gate_proj",
+      "down_proj",
+      "up_proj"
+    ],
+    "batch_size": 8,
+    "gradient_accumulation_steps": 8,
+    "learning_rate": 0.0003,
+    "num_epochs": 3,
+    "max_length": 512,
+    "warmup_steps": 100,
+    "output_dir": "/content/drive/MyDrive/compressed_context_model_sum_llama_chat"
+  }
+}

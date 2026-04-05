@@ -1,0 +1,34 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Model artifacts (generic output dir)
+compressed_context_model/
+*.bin
+*.safetensors
+
+# Include the shipped trained weights
+!compressed_context_model_sum_llama_chat/
+!compressed_context_model_sum_llama_chat/*.pt
+
+# Environment
+.env
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
