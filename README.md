@@ -115,7 +115,7 @@ This achieves compression of the full dialogue into a single KV vector per layer
 
 ## Based On
 
-This project is based on the Compressed Context Memory (CCM) paper, with modifications and changes suited for our use case. While the original CCM system uses compression tokens to compress accumulated context across multiple interaction turns (e.g., dialogue history, user profiles, task demonstrations), our adaptation repurposes the mechanism as a **summarization token** — compressing an entire dialogue into a single `<SUM>` token's KV cache to generate a standalone summary, rather than compressing context for downstream turn-by-turn prediction.
+This project is based on the Compressed Context Memory (CCM) paper. While the original CCM system uses compression tokens to compress accumulated context across multiple interaction turns (e.g., dialogue history, user profiles, task demonstrations), our adaptation repurposes the mechanism as a **summarization token** — compressing an entire dialogue into a single `<SUM>` token's KV cache to generate a standalone summary, rather than compressing context for downstream turn-by-turn prediction.
 
 ## References
 
