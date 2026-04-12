@@ -1,8 +1,6 @@
 # Dialogue Summarization with Compressed Context
 
-A dialogue summarization system that compresses an entire conversation into a single special token's KV cache, then generates a summary from that compressed representation alone — without access to the original dialogue at generation time.
-
-The model learns to distill dialogue information into a `<SUM>` token using **Conditional LoRA** (low-rank adapters that activate only at the `<SUM>` position), while the base LLM weights remain frozen.
+A memory-efficient summarization framework that distills entire conversation history into the KV cache of a single <SUM> token. By utilizing Conditional LoRA (active only at the compression bottleneck), the system enables "zero-history" inference, generating high-quality summaries without requiring access to the original input text at generation time.
 
 ## Architecture
 
